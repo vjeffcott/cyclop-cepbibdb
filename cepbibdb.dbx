@@ -1,0 +1,86 @@
+\ProvidesFile{cepbibdb.dbx}
+
+\DeclareDatamodelFields[type=list,datatype=key]{%
+  location,
+  institution,
+  venue,
+}
+
+\DeclareDatamodelFields[type=list,datatype=literal]{%
+  isbn,
+  issn,
+}
+
+\DeclareDatamodelFields[type=field,datatype=literal]{%
+  eventsubtitle,
+  eventnumber,
+  eventshorttitle,
+  seriessubtitle,
+  seriestitleaddon,
+  shortinstitution,
+  shortpublisher,
+}
+
+\DeclareDatamodelFields[type=field,datatype=date]{%
+  issuedate,
+}
+
+\DeclareDatamodelFields[type=field, format=xsv, datatype=keyword]{%
+  cepconcepts,
+  ceplexemes,
+}
+
+\DeclareDatamodelFields[type=field, format=xsv, datatype=entrykey]{cites}
+
+\DeclareDatamodelEntryfields{%
+  cepconcepts,
+  ceplexemes,
+  cites,
+}
+
+\DeclareDatamodelEntryfields[article]{%
+  issueday,
+  issueendday,
+  issueendhour,
+  issueendminute,
+  issueendmonth,
+  issueendsecond,
+  issueendtimezone,
+  issueendyear,
+  issueendyeardivision,
+  issuehour,
+  issueminute,
+  issuemonth,
+  issuesecond,
+  issuetimezone,
+  issueyear,
+  issueyeardivision,
+  issuelocation,
+  issuepublisher,
+  issuetitle,
+}
+
+\DeclareDatamodelEntryfields[article,periodical,suppperiodical,inproceedings,proceedings,mvproceedings,]{%
+  eventtitle,
+  eventsubtitle,
+  eventshorttitle,
+  eventtitleaddon,
+  eventnumber,
+  venue,
+  eventday,
+  eventendday,
+  eventendhour,
+  eventendminute,
+  eventendmonth,
+  eventendsecond,
+  eventendtimezone,
+  eventendyear,
+  eventendyeardivision,
+  eventhour,
+  eventminute,
+  eventmonth,
+  eventsecond,
+  eventtimezone,
+  eventyear,
+  eventyeardivision,
+}

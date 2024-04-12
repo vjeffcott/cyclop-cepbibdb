@@ -1,0 +1,155 @@
+\ProvidesFile{cepbibdb.bbx}
+\RequireBibliographyStyle{ext-authoryear-comp}
+\RequirePackage{xpatch}
+
+% Field Formats
+
+\DeclareFieldFormat{abstract}{\par\textsc{\bibstring{abstract}}\addcolon\space #1}
+\DeclareFieldFormat{annotation}{\par\textsc{\bibstring{annotation}}\addcolon\space #1}
+
+\DeclareFieldFormat{eprint:lingbuzz}{%
+  \ifhyperref
+    {\href{https://ling.auf.net/lingbuzz/#1}{\nolinkurl{lingbuzz/#1}}}
+    {\nolinkurl{lingbuzz/#1}}}
+\DeclareFieldFormat{eprint:hdl}{%
+  \mkbibacro{HDL}\addcolon\space
+  \ifhyperref
+    {\href{https://hdl.handle.net/#1}{\nolinkurl{#1}}}
+    {\nolinkurl{#1}}}
+\DeclareFieldFormat{eprint:jstor}{%
+  \mkbibacro{JSTOR}\addcolon\space
+  \ifhyperref
+    {\href{https://jstor.org/stable/#1}{\nolinkurl{#1}}}
+    {\nolinkurl{#1}}}
+
+\newcounter{cbx@keyword@total}
+\newcounter{cbx@keyword@count}
+\newcommand*{\keywordscount}[1]{%
+  \stepcounter{cbx@keyword@total}}
+
+\newcommand*{\keywordsprint}[1]{%
+  \stepcounter{cbx@keyword@count}%
+  \ifnumless{\value{cbx@keyword@count}}{2}
+    {}
+    {\addcomma\space}%
+  #1}
+
+\DeclareFieldFormat{keywords}{%
+  \setcounter{cbx@keyword@total}{0}%
+  \setcounter{cbx@keyword@count}{0}%
+  \forcsvlist{\keywordscount}{#1}%
+  \par \ifnumgreater{\value{cbx@keyword@total}}{1}
+    {\bibstring{keywords}}
+    {\bibstring{keyword}}%
+  \addcolon\space
+  \forcsvlist{\keywordsprint}{#1}%
+}
+
+\DeclareFieldFormat{cepconcepts}{%
+  \setcounter{cbx@keyword@total}{0}%
+  \setcounter{cbx@keyword@count}{0}%
+  \forcsvlist{\keywordscount}{#1}%
+  % \ifnumgreater{\value{cbx@keyword@total}}{1}
+  %   {\bibstring{keywords}}
+  %   {\bibstring{keyword}}%
+  \par CEP Concepts%
+  \addcolon\space
+  \forcsvlist{\keywordsprint}{#1}%
+}
+
+\DeclareFieldFormat{ceplexemes}{%
+  \setcounter{cbx@keyword@total}{0}%
+  \setcounter{cbx@keyword@count}{0}%
+  \forcsvlist{\keywordscount}{#1}%
+  % \ifnumgreater{\value{cbx@keyword@total}}{1}
+  %   {\bibstring{keywords}}
+  %   {\bibstring{keyword}}%
+  \par CEP Lexemes%
+  \addcolon\space
+  \forcsvlist{\keywordsprint}{#1}%
+}
+
+% List Formats
+
+\DeclareListWrapperFormat{isbn}{\mkbibacro{ISBN}\addcolon\space#1}
+\DeclareListWrapperFormat{issn}{\mkbibacro{ISSN}\addcolon\space#1}
+
+\DeclareListFormat{location}{%
+  \usebibmacro{list:delim}{%
+    \ifbibstring{#1}%
+      {\bibstring{#1}}%
+      {#1}}%
+  \ifbibstring{#1}%
+    {\bibstring{#1}}%
+    {#1}%
+  \usebibmacro{list:andothers}}%
+\DeclareListAlias{institution}{location}
+\DeclareListAlias{venue}{location}
+
+% Macros
+
+\xpatchbibmacro{event+venue+date}{\printfield{eventtitle}}{%
+    \printfield{eventtitle}%
+    \setunit{\addspace}%
+    \printfield{eventnumber}%
+    \setunit{\subtitlepunct}%
+    \printfield{eventsubtitle}%
+  }{}{\lingblx@warning{failed to patch macro 'event+venue+date'}}
+
+\xpatchbibmacro{event+venue+date}{\printfield{venue}}{%
+    \printlist{venue}%
+  }{}{\lingblx@warning{failed to patch macro 'event+venue+date'}}
+
+\renewbibmacro*{finentry}{\finentrypunct%
+  \usebibmacro{abstract}%
+  \clearfield{abstract}%
+  \usebibmacro{annotation}%
+  \clearfield{annotation}%
+  \printfield{keywords}%
+  \printfield{cepconcepts}%
+  \printfield{ceplexemes}%
+  \finentry}
+
+\renewbibmacro*{isbn}{%
+  \ifboolexpr{togl {bbx:isbn} and not test {\iflistxref{isbn}}}
+    {\printlist{isbn}}
+    {}}
+
+\renewbibmacro*{issn}{%
+  \ifboolexpr{togl {bbx:isbn} and not test {\iflistxref{isbn}}}
+    {\printlist{issn}}
+    {}}
+
+% Drivers
+
+\xpatchbibdriver{article}{%
+    \usebibmacro{byeditor+others}%
+  }{%
+    \usebibmacro{event+venue+date}%
+    \newunit\newblock
+    \usebibmacro{byeditor+others}%
+  }{}{}
+
+\xpatchbibdriver{collection}{%
+    \usebibmacro{byeditor+others}%
+  }{%
+    \usebibmacro{event+venue+date}%
+    \newunit\newblock
+    \usebibmacro{byeditor+others}%
+  }{}{}
+
+\xpatchbibmacro{incollection:parent}{%
+    \usebibmacro{byeditor+others}%
+  }{%
+    \usebibmacro{event+venue+date}%
+    \newunit\newblock
+    \usebibmacro{byeditor+others}%
+  }{}{}
+
+\xpatchbibdriver{periodical}{%
+    \usebibmacro{byeditor}%
+  }{%
+    \usebibmacro{event+venue+date}%
+    \newunit\newblock
+    \usebibmacro{byeditor}%
+  }{}{}
