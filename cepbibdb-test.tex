@@ -1,0 +1,65 @@
+\documentclass[a4paper,12pt]{article}
+\usepackage[main=british,russian]{babel}
+\usepackage{csquotes}
+\usepackage{fontspec}
+  \setmainfont{Libertinus Serif}
+  \setsansfont{Libertinus Sans}
+\usepackage[%
+    backref=true,%
+    citestyle=ext-authoryear-comp,%
+    bibstyle=cepbibdb,%
+    datamodel=cepbibdb,%
+    date=iso,%
+    seconds=true,%
+    dashed=false,%
+  ]{biblatex}
+  \addbibresource{cepbibdb.bib}
+  \DeclareLanguageMapping{british}{british-ling}
+\usepackage[pdflang=en]{hyperref}
+\usepackage{hyperxmp}
+
+\title{Clause-Embedding Predicates Bibliography}
+\author{Valérie Jeffcott}
+
+\begin{document}
+  \maketitle
+
+  \nocite{
+    baglini-francez2015-jsem,
+    burukina2020-glossa,
+    ciardelli-groenendijk-roelofsen2018,
+    coleman1975-bls,
+    condoravdi-lauer2009-santacruz,
+    condoravdi-lauer2010-goettingen,
+    condoravdi-lauer2011-sub,
+    condoravdi-lauer2016-semprag,
+    djaerv2023-jsem,
+    farkas1988-lingphil,
+    grano2016-wlphandout,
+    grano2017-jsem,
+    groenendijk-stokhof1982-lingphil,
+    heim1992-jsem,
+    jedrzejowski-umbach2023,
+    karttunen1971-language,
+    karttunen1977-lingphil,
+    lahiri2002,
+    landau2010-li,
+    mayr2019-nls,
+    mucha-hartmann-trawinski2021,
+    nadathur2023-jsem,
+    oezyildiz2021,
+    oezyildiz-al2023-sigtyp,
+    santorio2016-philrev,
+    schmitt-sode2018-sub,
+    schueler2016-studia,
+    sells1987-li,
+    theiler-roelofsen-aloni2019-nls,
+    uegaki2016-jsem,
+    uegaki2019-llcompass,
+    uegaki2023-jedrzejowski-umbach,
+    uhlik-zele2018-voprosy,
+    xiang2013-plc,
+    zimmermann.te2006-solstad-gronn-haug,
+    }
+  \printbibliography[heading=none]
+\end{document}
