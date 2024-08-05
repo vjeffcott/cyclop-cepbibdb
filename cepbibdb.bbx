@@ -2,6 +2,25 @@
 \RequireBibliographyStyle{ext-authoryear-comp}
 \RequirePackage{xpatch}
 
+% Annotations
+
+\newcommand*{\expandablefieldannotation}[2]{%
+  \csuse{abx@annotation@literal@field@%
+    \ifstrempty{#1}{\currentfield}{#1}@%
+    \ifstrempty{#2}{default}{#2}}}
+
+\newcommand*{\expandableitemannotation}[3]{%
+  \csuse{abx@annotation@literal@item@%
+    \ifstrempty{#1}{\currentlist}{#1}@%
+    \ifstrempty{#2}{default}{#2}@%
+    \ifstrempty{#3}{\the\value{listcount}}{#3}}}
+
+\newcommand*{\expandablepartannotation}[4]{%
+  \csuse{abx@annotation@literal@part@%
+    \ifstrempty{#1}{\currentname}{#1}@%
+    \ifstrempty{#2}{default}{#2}@%
+    \ifstrempty{#3}{\the\value{listcount}}{#3}@#4}}
+
 % Field Formats
 
 \DeclareFieldFormat{abstract}{\par\textsc{\bibstring{abstract}}\addcolon\space #1}
@@ -21,6 +40,40 @@
   \ifhyperref
     {\href{https://jstor.org/stable/#1}{\nolinkurl{#1}}}
     {\nolinkurl{#1}}}
+
+% List Formats
+
+\DeclareListWrapperFormat{isbn}{\mkbibacro{ISBN}\addcolon\space#1}
+\DeclareListWrapperFormat{issn}{\mkbibacro{ISSN}\addcolon\space#1}
+
+\newcommand\locpartdelim{\addcomma\addspace}
+\DeclareListFormat{location}{%
+  \usebibmacro{list:delim}{%
+    \ifbibstring{#1}%
+      {\bibxstring{#1}}%
+      {{#1}}%
+    \hasitemannotation[\currentlist][spec][\thelistcount]%
+      {\locpartdelim\ifbibxstring{\expandableitemannotation{}{spec}{}}%
+        {\bibxstring{\expandableitemannotation{}{spec}{}}}%
+        {{\expandableitemannotation{}{spec}{}}}%
+      }%
+      {}%
+  }%
+  \ifbibstring{#1}%
+    {\bibstring{#1}}%
+    {{#1}}%
+  \hasitemannotation[\currentlist][spec][\thelistcount]%
+    {\locpartdelim\ifbibxstring{\expandableitemannotation{}{spec}{}}%
+      {\bibxstring{\expandableitemannotation{}{spec}{}}}%
+      {{\expandableitemannotation{}{spec}{}}}%
+    }%
+    {}%
+  \usebibmacro{list:andothers}}
+
+\DeclareListAlias{institution}{location}
+\DeclareListAlias{venue}{location}
+
+% Keyword List Formats
 
 \newcounter{cbx@keyword@total}
 \newcounter{cbx@keyword@count}
@@ -68,23 +121,6 @@
   \addcolon\space
   \forcsvlist{\keywordsprint}{#1}%
 }
-
-% List Formats
-
-\DeclareListWrapperFormat{isbn}{\mkbibacro{ISBN}\addcolon\space#1}
-\DeclareListWrapperFormat{issn}{\mkbibacro{ISSN}\addcolon\space#1}
-
-\DeclareListFormat{location}{%
-  \usebibmacro{list:delim}{%
-    \ifbibstring{#1}%
-      {\bibstring{#1}}%
-      {#1}}%
-  \ifbibstring{#1}%
-    {\bibstring{#1}}%
-    {#1}%
-  \usebibmacro{list:andothers}}%
-\DeclareListAlias{institution}{location}
-\DeclareListAlias{venue}{location}
 
 % Macros
 
